@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tooluxe Hub - Your Daily Tools, All in One Place</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-blue: #007BFF;
+            --dark-blue: #0056b3;
+            --light-blue-bg: #e6f2ff;
+            --border-color: #dee2e6;
+            --dark-text: #212529;
+            --light-text: #6c757d;
+            --white: #ffffff;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+            --transition-speed: 0.4s;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background: radial-gradient(circle at 50% 0%, #f0f7ff, var(--white) 50%); color: var(--dark-text); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .header { background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.6rem; font-weight: 700; color: var(--primary-blue); text-decoration: none; }
+        .nav-links { list-style: none; display: flex; gap: 35px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--dark-text); font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: var(--primary-blue); }
+        .hamburger { display: none; cursor: pointer; font-size: 1.5rem; }
+
+        .hero { text-align: center; padding: 100px 20px 80px; }
+        .hero h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 15px; line-height: 1.2; }
+        .hero p { font-size: 1.2rem; max-width: 650px; margin: 0 auto 40px; color: var(--light-text); }
+        .cta-button { background: linear-gradient(45deg, var(--primary-blue), var(--dark-blue)); color: var(--white); padding: 16px 40px; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 600; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); }
+        .cta-button:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4); }
+
+        .main-content { padding-top: 20px; }
+        .category-tabs-container { position: sticky; top: 69px; z-index: 999; background-color: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); padding: 15px 0; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
+        .category-tabs { display: flex; gap: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .category-tabs::-webkit-scrollbar { display: none; }
+        .tab-link { flex-shrink: 0; padding: 10px 20px; font-size: 1rem; font-weight: 500; color: var(--dark-text); background-color: transparent; border: 2px solid transparent; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; }
+        .tab-link:hover { background-color: var(--light-blue-bg); }
+        .tab-link.active { background-color: var(--primary-blue); color: var(--white); font-weight: 600; }
+        
+        .tool-content-area { padding: 60px 0; }
+        .tool-content { display: none; opacity: 0; transform: translateY(15px); transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease; }
+        .tool-content.active { display: block; opacity: 1; transform: translateY(0); }
+        
+        .search-container { max-width: 700px; margin: 0 auto 50px; position: relative; }
+        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--light-text); }
+        #searchInput { width: 100%; padding: 18px 20px 18px 55px; font-size: 1.1rem; border-radius: 50px; border: 1px solid var(--border-color); transition: all 0.3s; }
+        #searchInput:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2); }
+        #no-results { text-align: center; margin-top: 20px; color: var(--light-text); font-weight: 500; display: none; }
+
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .tool-card { background-color: var(--white); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 30px 25px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease-in-out; }
+        .tool-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: var(--shadow); border-color: var(--primary-blue); }
+        .tool-icon { font-size: 2.8rem; color: var(--primary-blue); margin-bottom: 20px; transition: transform 0.3s ease; }
+        .tool-card:hover .tool-icon { transform: scale(1.1); }
+        .tool-card h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 8px; }
+        .tool-card p { font-size: 0.9rem; color: var(--light-text); margin-bottom: 25px; flex-grow: 1; }
+        .tool-button { background-color: var(--light-blue-bg); color: var(--primary-blue); padding: 12px 20px; border: 1px solid transparent; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; }
+        .tool-card:hover .tool-button { background-color: var(--primary-blue); color: var(--white); }
+
+        .footer { background-color: var(--dark-text); color: #adb5bd; padding: 60px 0; text-align: center; }
+        .footer .logo { color: var(--white); margin-bottom: 10px; }
+        .footer .tagline { margin-bottom: 20px; }
+        .footer .contact-info a { color: var(--primary-blue); text-decoration: none; }
+        .footer-links { list-style: none; display: flex; justify-content: center; gap: 25px; margin-top: 25px; }
+        .footer-links a { color: #ced4da; text-decoration: none; }
+
+        .hidden { display: none !important; }
+        .individual-tool-view { padding: 40px 0; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .back-to-tools-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--light-blue-bg); color: var(--primary-blue); text-decoration: none; border-radius: 8px; font-weight: 600; margin-bottom: 30px; transition: background-color 0.3s; }
+        .back-to-tools-btn:hover { background-color: #d1e7ff; }
+        .tool-page-header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .tool-page-header h2 { font-size: 2.5rem; margin-bottom: 5px; }
+        .tool-page-header p { font-size: 1.1rem; color: var(--light-text); }
+        .tool-page-content { padding: 40px; background-color: var(--white); border-radius: var(--border-radius); box-shadow: var(--shadow); min-height: 300px; text-align: center; }
+
+        @media (max-width: 991px) {
+            .nav-links { display: none; position: absolute; top: 69px; left: 0; width: 100%; background: var(--white); box-shadow: 0 10px 10px rgba(0,0,0,0.05); flex-direction: column; padding: 20px 0; gap: 20px; }
+            .nav-links.active { display: flex; }
+            .hamburger { display: block; }
+        }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.8rem; } }
+        @media (max-width: 576px) { .hero h1 { font-size: 2.2rem; } .hero p { font-size: 1rem; } .tool-grid { grid-template-columns: 1fr; } .tool-page-header h2 { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">Tooluxe Hub</a>
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#tools">Tools</a></li>
+                    <li><a href="mailto:tooluxehub@gmail.com">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+        </div>
+    </header>
+
+    <main>
+        <div id="main-homepage-view">
+            <section class="hero">
+                <h1>Your Daily Tools, All in One Place</h1>
+                <p>Convert, calculate, compress, and simplify your everyday tasks — fast and free.</p>
+                <a href="#tools" class="cta-button">Explore Tools</a>
+            </section>
+
+            <section id="tools" class="main-content">
+                <div class="category-tabs-container">
+                    <div class="container">
+                        <div class="category-tabs">
+                            <button class="tab-link active" data-tab="image-tools">🖼️ Image</button>
+                            <button class="tab-link" data-tab="document-tools">📄 Document</button>
+                            <button class="tab-link" data-tab="calculator-tools">🧮 Calculator</button>
+                            <button class="tab-link" data-tab="text-tools">🔤 Text</button>
+                            <button class="tab-link" data-tab="dev-tools">🌐 Developer</button>
+                            <button class="tab-link" data-tab="color-tools">🎨 Color</button>
+                            <button class="tab-link" data-tab="seo-tools">🌍 SEO</button>
+                            <button class="tab-link" data-tab="utility-tools">🛠️ Utility</button>
+                            <button class="tab-link" data-tab="media-tools">🔊 Media</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-content-area">
+                    <div class="container">
+                        <div class="search-container">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Search tools in the selected category...">
+                            <p id="no-results">No tools found matching your search.</p>
+                        </div>
+                        
+                        <div id="image-tools" class="tool-content active"><div class="tool-grid">
+                            <div class="tool-card" data-tool-id="image-converter"><i class="tool-icon fas fa-exchange-alt"></i><h3>Image Converter</h3><p>Convert images to JPG, PNG, WEBP, etc.</p><a href="#tool/image-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="image-compressor"><i class="tool-icon fas fa-compress-arrows-alt"></i><h3>Image Compressor</h3><p>Reduce file size without losing quality.</p><a href="#tool/image-compressor" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="image-resizer"><i class="tool-icon fas fa-ruler-combined"></i><h3>Image Resizer</h3><p>Change the dimensions of your images.</p><a href="#tool/image-resizer" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="image-cropper"><i class="tool-icon fas fa-crop-alt"></i><h3>Image Cropper</h3><p>Crop images to a specific area.</p><a href="#tool/image-cropper" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="image-to-text"><i class="tool-icon fas fa-file-alt"></i><h3>Image to Text (OCR)</h3><p>Extract text from any image.</p><a href="#tool/image-to-text" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="image-rotator"><i class="tool-icon fas fa-sync-alt"></i><h3>Image Rotator/Flipper</h3><p>Rotate and flip your images online.</p><a href="#tool/image-rotator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="background-remover"><i class="tool-icon fas fa-magic"></i><h3>Background Remover</h3><p>Automatically remove image backgrounds.</p><a href="#tool/background-remover" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="image-blur-sharpen"><i class="tool-icon fas fa-eraser"></i><h3>Image Blur/Sharpen</h3><p>Apply blur or sharpen effects to photos.</p><a href="#tool/image-blur-sharpen" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="image-color-inverter"><i class="tool-icon fas fa-adjust"></i><h3>Image Color Inverter</h3><p>Invert the colors of your image.</p><a href="#tool/image-color-inverter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="image-to-pdf"><i class="tool-icon fas fa-file-pdf"></i><h3>Image to PDF Converter</h3><p>Convert images to a PDF file.</p><a href="#tool/image-to-pdf" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="image-watermarker"><i class="tool-icon fas fa-signature"></i><h3>Image Watermarker</h3><p>Add a watermark to your photos.</p><a href="#tool/image-watermarker" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="image-metadata-viewer"><i class="tool-icon fas fa-info-circle"></i><h3>Image Metadata Viewer</h3><p>View EXIF data of your images.</p><a href="#tool/image-metadata-viewer" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="face-pixelator"><i class="tool-icon fas fa-user-secret"></i><h3>Face Pixelator</h3><p>Anonymize faces by pixelating them.</p><a href="#tool/face-pixelator" class="tool-button">Use Tool</a></div>
+                        </div></div>
+                        
+                        <div id="document-tools" class="tool-content"><div class="tool-grid">
+                            <div class="tool-card" data-tool-id="pdf-word-converter"><i class="tool-icon fas fa-file-word"></i><h3>PDF to Word / Word to PDF</h3><p>Convert between PDF and Word formats.</p><a href="#tool/pdf-word-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="pdf-compressor"><i class="tool-icon fas fa-file-archive"></i><h3>PDF Compressor</h3><p>Reduce the file size of your PDFs.</p><a href="#tool/pdf-compressor" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="pdf-merger-splitter"><i class="tool-icon fas fa-object-group"></i><h3>PDF Merger & Splitter</h3><p>Combine or split PDF files.</p><a href="#tool/pdf-merger-splitter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="document-converter"><i class="tool-icon fas fa-file-export"></i><h3>Document Converter</h3><p>Convert various document formats.</p><a href="#tool/document-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="pdf-lock-unlock"><i class="tool-icon fas fa-lock"></i><h3>PDF Lock/Unlock</h3><p>Protect or remove passwords from PDFs.</p><a href="#tool/pdf-lock-unlock" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="esign-pdf"><i class="tool-icon fas fa-pencil-alt"></i><h3>eSign PDF</h3><p>Sign your PDF documents electronically.</p><a href="#tool/esign-pdf" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="resume-builder"><i class="tool-icon fas fa-id-card"></i><h3>Resume Builder</h3><p>Create a professional resume in minutes.</p><a href="#tool/resume-builder" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="document-scanner"><i class="tool-icon fas fa-camera"></i><h3>Document Scanner (Cam)</h3><p>Scan documents using your device's camera.</p><a href="#tool/document-scanner" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="notepad-online"><i class="tool-icon fas fa-sticky-note"></i><h3>Notepad Online</h3><p>A simple online notepad for quick notes.</p><a href="#tool/notepad-online" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="pdf-to-image"><i class="tool-icon fas fa-file-image"></i><h3>PDF to Image</h3><p>Convert PDF pages to JPG or PNG images.</p><a href="#tool/pdf-to-image" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="doc-word-counter"><i class="tool-icon fas fa-sort-numeric-up"></i><h3>Word Counter</h3><p>Count words in your documents.</p><a href="#tool/doc-word-counter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="document-splitter"><i class="tool-icon fas fa-cut"></i><h3>Document File Splitter</h3><p>Split large documents into smaller parts.</p><a href="#tool/document-splitter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="pdf-page-numberer"><i class="tool-icon fas fa-list-ol"></i><h3>PDF Page Number Adder</h3><p>Add page numbers to your PDF files.</p><a href="#tool/pdf-page-numberer" class="tool-button">Use Tool</a></div>
+                        </div></div>
+
+                        <div id="calculator-tools" class="tool-content"><div class="tool-grid">
+                            <div class="tool-card" data-tool-id="scientific-calculator"><i class="tool-icon fas fa-calculator"></i><h3>Scientific Calculator</h3><p>Advanced calculator for scientific use.</p><a href="#tool/scientific-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="age-calculator"><i class="tool-icon fas fa-birthday-cake"></i><h3>Age Calculator</h3><p>Find your age in years, months, days.</p><a href="#tool/age-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="bmi-calculator"><i class="tool-icon fas fa-weight"></i><h3>BMI Calculator</h3><p>Calculate your Body Mass Index.</p><a href="#tool/bmi-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="loan-emi-calculator"><i class="tool-icon fas fa-hand-holding-usd"></i><h3>Loan EMI Calculator</h3><p>Calculate your Equated Monthly Installment.</p><a href="#tool/loan-emi-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="gst-calculator"><i class="tool-icon fas fa-receipt"></i><h3>GST Calculator</h3><p>Calculate Goods and Services Tax.</p><a href="#tool/gst-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="currency-converter"><i class="tool-icon fas fa-dollar-sign"></i><h3>Currency Converter</h3><p>Convert between different currencies.</p><a href="#tool/currency-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="percentage-calculator"><i class="tool-icon fas fa-percentage"></i><h3>Percentage Calculator</h3><p>Calculate percentages easily.</p><a href="#tool/percentage-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="date-difference-calculator"><i class="tool-icon fas fa-calendar-alt"></i><h3>Date Difference Calculator</h3><p>Find the duration between two dates.</p><a href="#tool/date-difference-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="fuel-cost-calculator"><i class="tool-icon fas fa-gas-pump"></i><h3>Fuel Cost Calculator</h3><p>Estimate the fuel cost for a trip.</p><a href="#tool/fuel-cost-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="discount-calculator"><i class="tool-icon fas fa-tags"></i><h3>Discount Calculator</h3><p>Calculate final price after a discount.</p><a href="#tool/discount-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="tax-calculator"><i class="tool-icon fas fa-file-invoice-dollar"></i><h3>Tax Calculator</h3><p>Estimate your income tax.</p><a href="#tool/tax-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="interest-calculator"><i class="tool-icon fas fa-chart-line"></i><h3>Interest Calculator</h3><p>Calculate simple or compound interest.</p><a href="#tool/interest-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="sip-calculator"><i class="tool-icon fas fa-piggy-bank"></i><h3>SIP Calculator</h3><p>Plan your Systematic Investment Plan.</p><a href="#tool/sip-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="retirement-calculator"><i class="tool-icon fas fa-umbrella-beach"></i><h3>Retirement Calculator</h3><p>Estimate your retirement savings.</p><a href="#tool/retirement-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="pregnancy-calculator"><i class="tool-icon fas fa-baby"></i><h3>Pregnancy Calculator</h3><p>Calculate your due date.</p><a href="#tool/pregnancy-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="calorie-calculator"><i class="tool-icon fas fa-apple-alt"></i><h3>Calorie Calculator</h3><p>Estimate your daily calorie needs.</p><a href="#tool/calorie-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="body-fat-calculator"><i class="tool-icon fas fa-ruler-vertical"></i><h3>Body Fat Calculator</h3><p>Estimate your body fat percentage.</p><a href="#tool/body-fat-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="bmr-calculator"><i class="tool-icon fas fa-fire"></i><h3>BMR Calculator</h3><p>Calculate your Basal Metabolic Rate.</p><a href="#tool/bmr-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="time-calculator"><i class="tool-icon fas fa-clock"></i><h3>Time Calculator</h3><p>Add or subtract time values.</p><a href="#tool/time-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="fraction-calculator"><i class="tool-icon fas fa-divide"></i><h3>Fraction Calculator</h3><p>Perform calculations with fractions.</p><a href="#tool/fraction-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="std-dev-calculator"><i class="tool-icon fas fa-chart-bar"></i><h3>Standard Deviation Calculator</h3><p>Calculate statistical standard deviation.</p><a href="#tool/std-dev-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="sqrt-calculator"><i class="tool-icon fas fa-square-root-alt"></i><h3>Square Root Calculator</h3><p>Find the square root of a number.</p><a href="#tool/sqrt-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="algebra-calculator"><i class="tool-icon fas fa-equals"></i><h3>Algebra Calculator</h3><p>Solve algebraic equations.</p><a href="#tool/algebra-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="compound-interest-calculator"><i class="tool-icon fas fa-coins"></i><h3>Compound Interest Calculator</h3><p>Calculate compound interest returns.</p><a href="#tool/compound-interest-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="unit-price-calculator"><i class="tool-icon fas fa-shopping-cart"></i><h3>Unit Price Calculator</h3><p>Compare prices of different items.</p><a href="#tool/unit-price-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="paypal-fee-calculator"><i class="tool-icon fab fa-paypal"></i><h3>PayPal Fee Calculator</h3><p>Calculate PayPal transaction fees.</p><a href="#tool/paypal-fee-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="mortgage-calculator"><i class="tool-icon fas fa-home"></i><h3>Mortgage Calculator</h3><p>Estimate your mortgage payments.</p><a href="#tool/mortgage-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="profit-margin-calculator"><i class="tool-icon fas fa-chart-pie"></i><h3>Profit Margin Calculator</h3><p>Calculate your business profit margin.</p><a href="#tool/profit-margin-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="roi-calculator"><i class="tool-icon fas fa-hand-holding-water"></i><h3>ROI Calculator</h3><p>Calculate Return on Investment.</p><a href="#tool/roi-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="gpa-calculator"><i class="tool-icon fas fa-graduation-cap"></i><h3>GPA Calculator</h3><p>Calculate your Grade Point Average.</p><a href="#tool/gpa-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="cgpa-calculator"><i class="tool-icon fas fa-book-reader"></i><h3>CGPA Calculator</h3><p>Calculate your Cumulative GPA.</p><a href="#tool/cgpa-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="sdt-calculator"><i class="tool-icon fas fa-tachometer-alt"></i><h3>Speed Distance Time Calculator</h3><p>Calculate speed, distance, or time.</p><a href="#tool/sdt-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="work-hour-calculator"><i class="tool-icon fas fa-briefcase"></i><h3>Work Hour Calculator</h3><p>Calculate your total work hours.</p><a href="#tool/work-hour-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="electricity-bill-calculator"><i class="tool-icon fas fa-bolt"></i><h3>Electricity Bill Calculator</h3><p>Estimate your electricity bill.</p><a href="#tool/electricity-bill-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="age-in-units-calculator"><i class="tool-icon fas fa-calendar-week"></i><h3>Age in Months/Days Calculator</h3><p>Calculate age in different units.</p><a href="#tool/age-in-units-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="probability-calculator"><i class="tool-icon fas fa-dice"></i><h3>Probability Calculator</h3><p>Calculate the probability of events.</p><a href="#tool/probability-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="area-perimeter-calculator"><i class="tool-icon fas fa-draw-polygon"></i><h3>Area & Perimeter Calculator</h3><p>Calculate area and perimeter of shapes.</p><a href="#tool/area-perimeter-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="volume-calculator"><i class="tool-icon fas fa-cube"></i><h3>Volume Calculator</h3><p>Calculate the volume of 3D shapes.</p><a href="#tool/volume-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="triangle-calculator"><i class="tool-icon fas fa-drafting-compass"></i><h3>Triangle Calculator</h3><p>Solve for angles and sides of a triangle.</p><a href="#tool/triangle-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="bmi-kids-calculator"><i class="tool-icon fas fa-child"></i><h3>BMI for Kids Calculator</h3><p>Calculate BMI for children and teens.</p><a href="#tool/bmi-kids-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="ovulation-calculator"><i class="tool-icon fas fa-venus-mars"></i><h3>Ovulation Calculator</h3><p>Predict your most fertile days.</p><a href="#tool/ovulation-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="love-calculator"><i class="tool-icon fas fa-heart"></i><h3>Love Percentage Calculator</h3><p>A fun calculator for compatibility.</p><a href="#tool/love-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="bac-calculator"><i class="tool-icon fas fa-wine-glass"></i><h3>Blood Alcohol Content Calculator</h3><p>Estimate your BAC level.</p><a href="#tool/bac-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="bsa-calculator"><i class="tool-icon fas fa-male"></i><h3>Body Surface Area Calculator</h3><p>Calculate a person's body surface area.</p><a href="#tool/bsa-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="days-until-from-calculator"><i class="tool-icon fas fa-calendar-day"></i><h3>Days Until/From Calculator</h3><p>Count days from or until a date.</p><a href="#tool/days-until-from-calculator" class="tool-button">Use Tool</a></div>
+                        </div></div>
+
+                        <div id="text-tools" class="tool-content"><div class="tool-grid">
+                            <div class="tool-card" data-tool-id="text-case-converter"><i class="tool-icon fas fa-font"></i><h3>Text Case Converter</h3><p>Convert text to various cases.</p><a href="#tool/text-case-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="word-char-counter"><i class="tool-icon fas fa-sort-amount-down"></i><h3>Word & Character Counter</h3><p>Count words and characters in your text.</p><a href="#tool/word-char-counter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="remove-duplicate-lines"><i class="tool-icon fas fa-stream"></i><h3>Remove Duplicate Lines</h3><p>Delete duplicate lines from a text block.</p><a href="#tool/remove-duplicate-lines" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="text-sorter"><i class="tool-icon fas fa-sort-alpha-down"></i><h3>Text Sorter</h3><p>Sort lines of text alphabetically.</p><a href="#tool/text-sorter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="text-reverser"><i class="tool-icon fas fa-retweet"></i><h3>Text Reverser</h3><p>Reverse characters, words, or lines.</p><a href="#tool/text-reverser" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="text-encryptor"><i class="tool-icon fas fa-user-shield"></i><h3>Text Encryptor/Decryptor</h3><p>Encrypt & decrypt text with a password.</p><a href="#tool/text-encryptor" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="text-to-speech"><i class="tool-icon fas fa-volume-up"></i><h3>Text to Speech (TTS)</h3><p>Convert text into natural-sounding speech.</p><a href="#tool/text-to-speech" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="speech-to-text"><i class="tool-icon fas fa-microphone-alt"></i><h3>Speech to Text</h3><p>Transcribe your spoken words into text.</p><a href="#tool/speech-to-text" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="typing-speed-test"><i class="tool-icon fas fa-keyboard"></i><h3>Typing Speed Test</h3><p>Check your typing speed and accuracy.</p><a href="#tool/typing-speed-test" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="lorem-ipsum-generator"><i class="tool-icon fas fa-paragraph"></i><h3>Lorem Ipsum Generator</h3><p>Generate placeholder text for designs.</p><a href="#tool/lorem-ipsum-generator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="text-diff-checker"><i class="tool-icon fas fa-not-equal"></i><h3>Text Diff Checker</h3><p>Compare two texts and find differences.</p><a href="#tool/text-diff-checker" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="emoji-remover"><i class="tool-icon fas fa-smile"></i><h3>Emoji Remover/Adder</h3><p>Remove or add emojis from your text.</p><a href="#tool/emoji-remover" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="hashtag-generator"><i class="tool-icon fas fa-hashtag"></i><h3>Hashtag Generator</h3><p>Generate hashtags for social media.</p><a href="#tool/hashtag-generator" class="tool-button">Use Tool</a></div>
+                        </div></div>
+
+                        <div id="dev-tools" class="tool-content"><div class="tool-grid">
+                            <div class="tool-card" data-tool-id="code-minifier"><i class="tool-icon fas fa-file-code"></i><h3>HTML/CSS/JS Minifier</h3><p>Minify code to reduce file size.</p><a href="#tool/code-minifier" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="json-formatter"><i class="tool-icon fas fa-sitemap"></i><h3>JSON Formatter & Validator</h3><p>Format and validate JSON data.</p><a href="#tool/json-formatter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="base64-converter"><i class="tool-icon fas fa-code"></i><h3>Base64 Encoder/Decoder</h3><p>Encode or decode data in Base64.</p><a href="#tool/base64-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="url-converter"><i class="tool-icon fas fa-link"></i><h3>URL Encoder/Decoder</h3><p>Encode or decode special URL characters.</p><a href="#tool/url-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="color-picker-converter"><i class="tool-icon fas fa-palette"></i><h3>Color Picker & Converter</h3><p>Pick a color and convert it (HEX, RGB).</p><a href="#tool/color-picker-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="regex-tester"><i class="tool-icon fas fa-project-diagram"></i><h3>Regex Tester</h3><p>Test your regular expressions.</p><a href="#tool/regex-tester" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="http-header-checker"><i class="tool-icon fas fa-server"></i><h3>HTTP Header Checker</h3><p>View the HTTP headers of a URL.</p><a href="#tool/http-header-checker" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="dns-lookup"><i class="tool-icon fas fa-network-wired"></i><h3>DNS Lookup Tool</h3><p>Check the DNS records for a domain.</p><a href="#tool/dns-lookup" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="whois-checker"><i class="tool-icon fas fa-globe"></i><h3>WHOIS Domain Checker</h3><p>Find registration info for a domain.</p><a href="#tool/whois-checker" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="ssl-checker"><i class="tool-icon fas fa-shield-alt"></i><h3>SSL Certificate Checker</h3><p>Check the SSL certificate of a website.</p><a href="#tool/ssl-checker" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="user-agent-parser"><i class="tool-icon fas fa-robot"></i><h3>User-Agent Parser</h3><p>Analyze and parse a user-agent string.</p><a href="#tool/user-agent-parser" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="source-code-viewer"><i class="tool-icon fas fa-eye"></i><h3>Website Source Code Viewer</h3><p>View the HTML source code of any URL.</p><a href="#tool/source-code-viewer" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="ip-geolocation"><i class="tool-icon fas fa-map-marker-alt"></i><h3>IP Geolocation Checker</h3><p>Find the location of an IP address.</p><a href="#tool/ip-geolocation" class="tool-button">Use Tool</a></div>
+                        </div></div>
+
+                        <div id="color-tools" class="tool-content"><div class="tool-grid">
+                            <div class="tool-card" data-tool-id="color-picker-from-image"><i class="tool-icon fas fa-eye-dropper"></i><h3>Color Picker from Image</h3><p>Extract colors from an uploaded image.</p><a href="#tool/color-picker-from-image" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="hex-rgb-converter"><i class="tool-icon fas fa-sync"></i><h3>HEX to RGB Converter</h3><p>Convert HEX color codes to RGB.</p><a href="#tool/hex-rgb-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="gradient-generator"><i class="tool-icon fas fa-fill-drip"></i><h3>Gradient Generator</h3><p>Create beautiful CSS color gradients.</p><a href="#tool/gradient-generator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="contrast-checker"><i class="tool-icon fas fa-adjust"></i><h3>Contrast Checker</h3><p>Check color contrast for accessibility.</p><a href="#tool/contrast-checker" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="palette-generator"><i class="tool-icon fas fa-swatchbook"></i><h3>Palette Generator</h3><p>Generate color palettes from a single color.</p><a href="#tool/palette-generator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="color-blindness-simulator"><i class="tool-icon fas fa-low-vision"></i><h3>Color Blindness Simulator</h3><p>Simulate how colors appear to others.</p><a href="#tool/color-blindness-simulator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="color-mixer"><i class="tool-icon fas fa-blender"></i><h3>Color Mixer</h3><p>Mix two colors to create a new one.</p><a href="#tool/color-mixer" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="color-temperature-tool"><i class="tool-icon fas fa-thermometer-half"></i><h3>Color Temperature Tool</h3><p>Explore color temperatures (Kelvin).</p><a href="#tool/color-temperature-tool" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="material-ui-colors"><i class="tool-icon fab fa-mdb"></i><h3>Material UI Colors</h3><p>Explore Material Design color palettes.</p><a href="#tool/material-ui-colors" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="flat-ui-colors"><i class="tool-icon fas fa-th-large"></i><h3>Flat UI Color Palettes</h3><p>Browse beautiful flat UI colors.</p><a href="#tool/flat-ui-colors" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="css-color-generator"><i class="tool-icon fab fa-css3-alt"></i><h3>CSS Color Code Generator</h3><p>Generate various CSS color codes.</p><a href="#tool/css-color-generator" class="tool-button">Use Tool</a></div>
+                        </div></div>
+
+                        <div id="seo-tools" class="tool-content"><div class="tool-grid">
+                            <div class="tool-card" data-tool-id="keyword-density-checker"><i class="tool-icon fas fa-search-dollar"></i><h3>Keyword Density Checker</h3><p>Analyze keyword density of a page.</p><a href="#tool/keyword-density-checker" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="meta-tag-analyzer"><i class="tool-icon fas fa-tags"></i><h3>Meta Tag Analyzer</h3><p>Analyze the meta tags of a URL.</p><a href="#tool/meta-tag-analyzer" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="seo-word-counter"><i class="tool-icon fas fa-file-word"></i><h3>Word Counter</h3><p>Count words in a block of text.</p><a href="#tool/seo-word-counter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="backlink-checker"><i class="tool-icon fas fa-link"></i><h3>Backlink Checker</h3><p>Find backlinks to a specific domain.</p><a href="#tool/backlink-checker" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="serp-preview-tool"><i class="tool-icon fab fa-google"></i><h3>SERP Preview Tool</h3><p>Preview your page on Google search.</p><a href="#tool/serp-preview-tool" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="utm-link-generator"><i class="tool-icon fas fa-external-link-alt"></i><h3>UTM Link Generator</h3><p>Create campaign URLs with UTM parameters.</p><a href="#tool/utm-link-generator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="robots-txt-generator"><i class="tool-icon fas fa-robot"></i><h3>Robots.txt Generator</h3><p>Create a robots.txt file for your site.</p><a href="#tool/robots-txt-generator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="sitemap-generator"><i class="tool-icon fas fa-sitemap"></i><h3>Sitemap Generator</h3><p>Generate an XML sitemap for your site.</p><a href="#tool/sitemap-generator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="youtube-extractor"><i class="tool-icon fab fa-youtube"></i><h3>YouTube Title & Tag Extractor</h3><p>Extract titles and tags from YT videos.</p><a href="#tool/youtube-extractor" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="instagram-caption-analyzer"><i class="tool-icon fab fa-instagram"></i><h3>Instagram Caption Analyzer</h3><p>Analyze the effectiveness of IG captions.</p><a href="#tool/instagram-caption-analyzer" class="tool-button">Use Tool</a></div>
+                        </div></div>
+
+                        <div id="utility-tools" class="tool-content"><div class="tool-grid">
+                            <div class="tool-card" data-tool-id="qr-code-generator"><i class="tool-icon fas fa-qrcode"></i><h3>QR Code Generator & Scanner</h3><p>Create or scan QR codes instantly.</p><a href="#tool/qr-code-generator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="barcode-generator"><i class="tool-icon fas fa-barcode"></i><h3>Barcode Generator</h3><p>Create various types of barcodes.</p><a href="#tool/barcode-generator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="uuid-generator"><i class="tool-icon fas fa-fingerprint"></i><h3>UUID Generator</h3><p>Generate universally unique identifiers.</p><a href="#tool/uuid-generator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="unit-converter"><i class="tool-icon fas fa-balance-scale"></i><h3>Unit Converter</h3><p>Convert various units of measurement.</p><a href="#tool/unit-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="timezone-converter"><i class="tool-icon fas fa-globe-americas"></i><h3>Time Zone Converter</h3><p>Convert times between different zones.</p><a href="#tool/timezone-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="password-generator"><i class="tool-icon fas fa-random"></i><h3>Password Generator</h3><p>Create strong, random passwords.</p><a href="#tool/password-generator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="countdown-timer"><i class="tool-icon fas fa-hourglass-half"></i><h3>Countdown Timer</h3><p>Set a timer for any event.</p><a href="#tool/countdown-timer" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="stopwatch"><i class="tool-icon fas fa-stopwatch"></i><h3>Online Stopwatch</h3><p>A simple and accurate stopwatch.</p><a href="#tool/stopwatch" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="ip-finder"><i class="tool-icon fas fa-laptop-house"></i><h3>IP Address Finder</h3><p>Find your public IP address.</p><a href="#tool/ip-finder" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="speed-tester"><i class="tool-icon fas fa-wifi"></i><h3>Internet Speed Tester</h3><p>Check your internet connection speed.</p><a href="#tool/speed-tester" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="voice-recorder"><i class="tool-icon fas fa-microphone-alt"></i><h3>Online Voice Recorder</h3><p>Record your voice using your mic.</p><a href="#tool/voice-recorder" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="digital-compass"><i class="tool-icon fas fa-compass"></i><h3>Digital Compass</h3><p>Find your direction with an online compass.</p><a href="#tool/digital-compass" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="file-size-calculator"><i class="tool-icon fas fa-file-invoice"></i><h3>File Size Calculator</h3><p>Calculate file sizes in various units.</p><a href="#tool/file-size-calculator" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="timestamp-converter"><i class="tool-icon fas fa-history"></i><h3>Epoch/Unix Timestamp Converter</h3><p>Convert between human-readable dates.</p><a href="#tool/timestamp-converter" class="tool-button">Use Tool</a></div>
+                        </div></div>
+
+                        <div id="media-tools" class="tool-content"><div class="tool-grid">
+                            <div class="tool-card" data-tool-id="audio-converter"><i class="tool-icon fas fa-file-audio"></i><h3>Audio Converter</h3><p>Convert between audio formats (MP3, WAV).</p><a href="#tool/audio-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="video-converter"><i class="tool-icon fas fa-file-video"></i><h3>Video Converter</h3><p>Convert between video formats (MP4, AVI).</p><a href="#tool/video-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="audio-cutter"><i class="tool-icon fas fa-cut"></i><h3>Audio Cutter / Trimmer</h3><p>Trim or cut sections of audio files.</p><a href="#tool/audio-cutter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="video-cutter"><i class="tool-icon fas fa-film"></i><h3>Video Cutter / Trimmer</h3><p>Trim or cut sections of video files.</p><a href="#tool/video-cutter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="mp3-to-wav-converter"><i class="tool-icon fas fa-file-audio"></i><h3>MP3 to WAV Converter</h3><p>Convert MP3 files to WAV format.</p><a href="#tool/mp3-to-wav-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="wav-to-mp3-converter"><i class="tool-icon fas fa-file-audio"></i><h3>WAV to MP3 Converter</h3><p>Convert WAV files to MP3 format.</p><a href="#tool/wav-to-mp3-converter" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="video-to-mp3"><i class="tool-icon fas fa-music"></i><h3>Video to MP3 Converter</h3><p>Extract audio from a video file.</p><a href="#tool/video-to-mp3" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="audio-joiner"><i class="tool-icon fas fa-plus-square"></i><h3>Audio Joiner</h3><p>Merge multiple audio files into one.</p><a href="#tool/audio-joiner" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="video-joiner"><i class="tool-icon fas fa-photo-video"></i><h3>Video Joiner</h3><p>Merge multiple video files into one.</p><a href="#tool/video-joiner" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="audio-volume-booster"><i class="tool-icon fas fa-volume-up"></i><h3>Audio Volume Booster</h3><p>Increase the volume of audio files.</p><a href="#tool/audio-volume-booster" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="video-speed-controller"><i class="tool-icon fas fa-forward"></i><h3>Video Speed Controller</h3><p>Change the playback speed of a video.</p><a href="#tool/video-speed-controller" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="audio-normalizer"><i class="tool-icon fas fa-sliders-h"></i><h3>Audio Normalizer</h3><p>Normalize the volume of an audio file.</p><a href="#tool/audio-normalizer" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="voice-changer"><i class="tool-icon fas fa-headset"></i><h3>Voice Changer</h3><p>Change your voice with fun effects.</p><a href="#tool/voice-changer" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="media-voice-recorder"><i class="tool-icon fas fa-microphone-alt"></i><h3>Online Voice Recorder</h3><p>Record your voice using your mic.</p><a href="#tool/media-voice-recorder" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="noise-remover"><i class="tool-icon fas fa-volume-mute"></i><h3>Background Noise Remover</h3><p>Clean up audio by removing noise.</p><a href="#tool/noise-remover" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="mute-video"><i class="tool-icon fas fa-video-slash"></i><h3>Mute Video Tool</h3><p>Remove the audio track from a video.</p><a href="#tool/mute-video" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="loop-audio"><i class="tool-icon fas fa-redo"></i><h3>Loop Audio Maker</h3><p>Create a seamless looping audio track.</p><a href="#tool/loop-audio" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="subtitle-adder"><i class="tool-icon fas fa-closed-captioning"></i><h3>Subtitles Adder</h3><p>Add subtitle files (SRT) to a video.</p><a href="#tool/subtitle-adder" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="video-frame-extractor"><i class="tool-icon fas fa-file-image"></i><h3>Video Frame Extractor</h3><p>Extract still image frames from a video.</p><a href="#tool/video-frame-extractor" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card" data-tool-id="youtube-thumbnail-downloader"><i class="tool-icon fab fa-youtube-square"></i><h3>YouTube Thumbnail Downloader</h3><p>Download thumbnails from YouTube videos.</p><a href="#tool/youtube-thumbnail-downloader" class="tool-button">Use Tool</a></div>
+                        </div></div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="individual-tool-view" class="hidden">
+            <div class="container">
+                <div class="individual-tool-view">
+                    <a href="#tools" class="back-to-tools-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to All Tools
+                    </a>
+                    <div class="tool-page-header">
+                        <h2 id="tool-page-title"></h2>
+                        <p id="tool-page-description"></p>
+                    </div>
+                    <div id="tool-page-content">
+                        <h3>Tool Interface Placeholder</h3>
+                        <p>Your specific tool's HTML and functionality will be built here.</p>
+                        <p>Just find this section in the code and replace this placeholder with your actual tool's interface.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <a href="#" class="logo">Tooluxe Hub</a>
+            <p class="tagline">Simplifying your digital life.</p>
+            <p class="contact-info">Contact: <a href="mailto:tooluxehub@gmail.com">tooluxehub@gmail.com</a></p>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Use</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainView = document.getElementById('main-homepage-view');
+            const toolView = document.getElementById('individual-tool-view');
+            const toolPageTitle = document.getElementById('tool-page-title');
+            const toolPageDescription = document.getElementById('tool-page-description');
+            const toolPageContent = document.getElementById('tool-page-content');
+            
+            const tabLinks = document.querySelectorAll('.tab-link');
+            const tabContents = document.querySelectorAll('.tool-content');
+            const searchInput = document.getElementById('searchInput');
+            const noResultsMessage = document.getElementById('no-results');
+
+            // --- SPA Router Logic ---
+            const handleRouteChange = () => {
+                const hash = window.location.hash;
+
+                if (hash.startsWith('#tool/')) {
+                    // Show individual tool page
+                    const toolId = hash.substring(6);
+                    const toolCard = document.querySelector(`.tool-card[data-tool-id='${toolId}']`);
+
+                    if (toolCard) {
+                        const title = toolCard.querySelector('h3').textContent;
+                        const description = toolCard.querySelector('p').textContent;
+
+                        toolPageTitle.textContent = title;
+                        toolPageDescription.textContent = description;
+                        
+                        // IMPORTANT: This is where you will build the interface for each tool.
+                        // You can use a big switch statement or if/else chain based on `toolId`
+                        // to inject the correct tool's HTML into `toolPageContent`.
+                        toolPageContent.innerHTML = `
+                            <h3>${title} Interface</h3>
+                            <p>Your tool functionality for <strong>${title}</strong> will be built here.</p>
+                            <p>To do this, edit the JavaScript 'handleRouteChange' function.</p>
+                        `;
+
+                        mainView.classList.add('hidden');
+                        toolView.classList.remove('hidden');
+                        window.scrollTo(0, 0);
+                    } else {
+                        // Tool not found, go back to homepage
+                        window.location.hash = '#tools';
+                    }
+                } else {
+                    // Show main homepage
+                    mainView.classList.remove('hidden');
+                    toolView.classList.add('hidden');
+                }
+            };
+
+            // --- Event Listeners ---
+            window.addEventListener('hashchange', handleRouteChange);
+            handleRouteChange(); // Handle initial page load
+
+            // Tab Switching Logic
+            tabLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tabId = link.dataset.tab;
+                    tabLinks.forEach(l => l.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    link.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                    searchInput.value = '';
+                    filterTools(); 
+                });
+            });
+
+            // Search Filter Logic
+            const filterTools = () => {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const activeTabContent = document.querySelector('.tool-content.active');
+                if (!activeTabContent) return;
+                const cardsInActiveTab = activeTabContent.querySelectorAll('.tool-card');
+                let visibleCount = 0;
+                cardsInActiveTab.forEach(card => {
+                    const toolName = card.querySelector('h3').textContent.toLowerCase();
+                    const isVisible = toolName.includes(searchTerm);
+                    card.style.display = isVisible ? 'flex' : 'none';
+                    if (isVisible) visibleCount++;
+                });
+                noResultsMessage.style.display = (visibleCount === 0 && searchTerm.length > 0) ? 'block' : 'none';
+            };
+            searchInput.addEventListener('keyup', filterTools);
+
+            // Hamburger menu logic
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
+        });
+    </script>
+</body>
+</html>
