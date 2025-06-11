@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tooluxe Hub - Your Daily Tools, All in One Place</title>
+    <title>Tooluxe Hub - Final Monetized Platform</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- ✅ Google AdSense Script: Replace with your Publisher ID -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"
+     crossorigin="anonymous"></script>
 
     <style>
         :root {
@@ -19,16 +23,19 @@
             --dark-text: #212529;
             --light-text: #6c757d;
             --white: #ffffff;
+            --success-green: #28a745;
+            --warning-orange: #ffc107;
             --shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             --border-radius: 12px;
             --transition-speed: 0.4s;
         }
 
+        /* --- Core & Layout Styles (Unchanged) --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { font-family: 'Poppins', sans-serif; background: radial-gradient(circle at 50% 0%, #f0f7ff, var(--white) 50%); color: var(--dark-text); line-height: 1.6; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-
+        .hidden { display: none !important; }
         .header { background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
         .header .container { display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.6rem; font-weight: 700; color: var(--primary-blue); text-decoration: none; }
@@ -36,13 +43,12 @@
         .nav-links a { text-decoration: none; color: var(--dark-text); font-weight: 500; transition: color 0.3s ease; }
         .nav-links a:hover { color: var(--primary-blue); }
         .hamburger { display: none; cursor: pointer; font-size: 1.5rem; }
-
         .hero { text-align: center; padding: 100px 20px 80px; }
         .hero h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 15px; line-height: 1.2; }
         .hero p { font-size: 1.2rem; max-width: 650px; margin: 0 auto 40px; color: var(--light-text); }
-        .cta-button { background: linear-gradient(45deg, var(--primary-blue), var(--dark-blue)); color: var(--white); padding: 16px 40px; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 600; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); }
-        .cta-button:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4); }
-
+        .cta-button { background: linear-gradient(45deg, var(--primary-blue), var(--dark-blue)); color: var(--white); padding: 16px 40px; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 600; text-decoration: none; }
+        
+        /* --- Tool & Tab Styles (Unchanged) --- */
         .main-content { padding-top: 20px; }
         .category-tabs-container { position: sticky; top: 69px; z-index: 999; background-color: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); padding: 15px 0; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
         .category-tabs { display: flex; gap: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
@@ -50,51 +56,68 @@
         .tab-link { flex-shrink: 0; padding: 10px 20px; font-size: 1rem; font-weight: 500; color: var(--dark-text); background-color: transparent; border: 2px solid transparent; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; }
         .tab-link:hover { background-color: var(--light-blue-bg); }
         .tab-link.active { background-color: var(--primary-blue); color: var(--white); font-weight: 600; }
-        
         .tool-content-area { padding: 60px 0; }
         .tool-content { display: none; opacity: 0; transform: translateY(15px); transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease; }
         .tool-content.active { display: block; opacity: 1; transform: translateY(0); }
-        
         .search-container { max-width: 700px; margin: 0 auto 50px; position: relative; }
-        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--light-text); }
-        #searchInput { width: 100%; padding: 18px 20px 18px 55px; font-size: 1.1rem; border-radius: 50px; border: 1px solid var(--border-color); transition: all 0.3s; }
-        #searchInput:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2); }
-        #no-results { text-align: center; margin-top: 20px; color: var(--light-text); font-weight: 500; display: none; }
-
+        #searchInput { width: 100%; padding: 18px 20px 18px 55px; font-size: 1.1rem; border-radius: 50px; border: 1px solid var(--border-color); }
         .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .tool-card { background-color: var(--white); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 30px 25px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease-in-out; }
+        .tool-card { background-color: var(--white); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 30px 25px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease-in-out; position: relative; overflow: hidden; }
         .tool-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: var(--shadow); border-color: var(--primary-blue); }
-        .tool-icon { font-size: 2.8rem; color: var(--primary-blue); margin-bottom: 20px; transition: transform 0.3s ease; }
-        .tool-card:hover .tool-icon { transform: scale(1.1); }
-        .tool-card h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 8px; }
-        .tool-card p { font-size: 0.9rem; color: var(--light-text); margin-bottom: 25px; flex-grow: 1; }
-        .tool-button { background-color: var(--light-blue-bg); color: var(--primary-blue); padding: 12px 20px; border: 1px solid transparent; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; }
-        .tool-card:hover .tool-button { background-color: var(--primary-blue); color: var(--white); }
+        .tool-icon { font-size: 2.8rem; color: var(--primary-blue); margin-bottom: 20px; }
+        .tool-button { background-color: var(--light-blue-bg); color: var(--primary-blue); padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+        .tool-card.sponsored { border-color: #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+        .tool-card.sponsored::after { content: 'Sponsored'; position: absolute; top: 10px; right: -30px; background-color: #ffd700; color: var(--dark-text); padding: 4px 30px; font-size: 0.8rem; font-weight: 600; transform: rotate(45deg); }
+        
+        /* --- General Content & Monetization Styles --- */
+        .content-section { padding: 80px 0; }
+        .content-section:nth-of-type(even) { background-color: #f8f9fa; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 10px; }
+        .section-header p { font-size: 1.1rem; color: var(--light-text); max-width: 600px; margin: 0 auto; }
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        .blog-card { background: var(--white); border-radius: var(--border-radius); box-shadow: var(--shadow); overflow: hidden; }
+        .blog-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+        .blog-content { padding: 25px; }
+        .blog-content .read-more-btn { color: var(--primary-blue); text-decoration: none; font-weight: 600; }
+        .subscribe-box { background-color: var(--dark-text); color: var(--white); text-align: center; padding: 60px 40px; border-radius: var(--border-radius); }
+        .subscribe-form { display: flex; justify-content: center; gap: 10px; max-width: 500px; margin: 30px auto 0; flex-wrap: wrap; }
+        .subscribe-form input[type="email"] { flex-grow: 1; padding: 15px; border-radius: 8px; border: 1px solid var(--light-text); font-size: 1rem; }
+        .subscribe-form button { background-color: var(--primary-blue); color: var(--white); padding: 15px 25px; border-radius: 8px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        
+        /* --- NEW/UPDATED: CPA Offer Section Styles --- */
+        .offer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        .offer-card { background: var(--white); border-radius: var(--border-radius); box-shadow: var(--shadow); text-align: left; display: flex; flex-direction: column; transition: transform 0.3s ease; }
+        .offer-card:hover { transform: translateY(-8px); }
+        .offer-thumbnail { width: 100%; height: 180px; object-fit: cover; border-top-left-radius: var(--border-radius); border-top-right-radius: var(--border-radius); }
+        .offer-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .offer-tag { background-color: var(--light-blue-bg); color: var(--primary-blue); font-size: 0.8rem; font-weight: 600; padding: 4px 10px; border-radius: 50px; display: inline-block; margin-bottom: 15px; }
+        .offer-content h3 { font-size: 1.3rem; margin-bottom: 10px; }
+        .offer-content p { color: var(--light-text); margin-bottom: 20px; flex-grow: 1; }
+        .offer-button { background-color: var(--success-green); color: var(--white); text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; display: block; }
+        .offer-button:hover { background-color: #218838; }
+        .view-all-btn { display: inline-block; margin-top: 10px; font-weight: 600; color: var(--primary-blue); text-decoration: none; }
 
+        /* --- AdSense & SPA Page Styles --- */
+        .adsense-placeholder { background-color: #f0f0f0; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; text-align: center; color: #999; font-weight: 500; border-radius: var(--border-radius); margin: 30px auto; overflow: hidden; }
+        .individual-tool-view, .cpa-offers-view { padding: 40px 0; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .back-to-home-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--light-blue-bg); color: var(--primary-blue); text-decoration: none; border-radius: 8px; font-weight: 600; margin-bottom: 30px; }
+        .page-header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .page-header h2 { font-size: 2.5rem; }
+        .tool-and-ad-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .sidebar-ad-container { display: none; }
+        .below-tool-ad, .homepage-ad-banner { width: 100%; max-width: 728px; min-height: 90px; }
+        .sticky-footer-ad { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--white); box-shadow: 0 -4px 15px rgba(0,0,0,0.1); z-index: 1001; transform: translateY(100%); transition: transform 0.5s ease-in-out; padding: 10px; display: flex; justify-content: center; align-items: center; }
+        .sticky-footer-ad.visible { transform: translateY(0); }
+        .sticky-footer-ad .close-ad-btn { background: #e9ecef; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 1rem; color: var(--light-text); margin-left: 15px; }
+        .footer-ad { width: 100%; max-width: 728px; min-height: 90px; margin-bottom: 40px; }
         .footer { background-color: var(--dark-text); color: #adb5bd; padding: 60px 0; text-align: center; }
-        .footer .logo { color: var(--white); margin-bottom: 10px; }
-        .footer .tagline { margin-bottom: 20px; }
-        .footer .contact-info a { color: var(--primary-blue); text-decoration: none; }
-        .footer-links { list-style: none; display: flex; justify-content: center; gap: 25px; margin-top: 25px; }
+        .footer-links { list-style: none; display: flex; justify-content: center; gap: 25px; margin-top: 25px; flex-wrap: wrap; }
         .footer-links a { color: #ced4da; text-decoration: none; }
 
-        .hidden { display: none !important; }
-        .individual-tool-view { padding: 40px 0; animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .back-to-tools-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--light-blue-bg); color: var(--primary-blue); text-decoration: none; border-radius: 8px; font-weight: 600; margin-bottom: 30px; transition: background-color 0.3s; }
-        .back-to-tools-btn:hover { background-color: #d1e7ff; }
-        .tool-page-header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
-        .tool-page-header h2 { font-size: 2.5rem; margin-bottom: 5px; }
-        .tool-page-header p { font-size: 1.1rem; color: var(--light-text); }
-        .tool-page-content { padding: 40px; background-color: var(--white); border-radius: var(--border-radius); box-shadow: var(--shadow); min-height: 300px; text-align: center; }
-
-        @media (max-width: 991px) {
-            .nav-links { display: none; position: absolute; top: 69px; left: 0; width: 100%; background: var(--white); box-shadow: 0 10px 10px rgba(0,0,0,0.05); flex-direction: column; padding: 20px 0; gap: 20px; }
-            .nav-links.active { display: flex; }
-            .hamburger { display: block; }
-        }
-        @media (max-width: 768px) { .hero h1 { font-size: 2.8rem; } }
-        @media (max-width: 576px) { .hero h1 { font-size: 2.2rem; } .hero p { font-size: 1rem; } .tool-grid { grid-template-columns: 1fr; } .tool-page-header h2 { font-size: 2rem; } }
+        @media (min-width: 1000px) { .tool-and-ad-grid { grid-template-columns: 2fr 1fr; } .sidebar-ad-container { display: block;} }
+        @media (max-width: 991px) { .nav-links.active { display: flex; } .hamburger { display: block; } .nav-links { display: none; position: absolute; top: 69px; left: 0; width: 100%; background: var(--white); box-shadow: 0 10px 10px rgba(0,0,0,0.05); flex-direction: column; padding: 20px 0; gap: 20px; } }
     </style>
 </head>
 <body>
@@ -106,6 +129,7 @@
                 <ul class="nav-links" id="navLinks">
                     <li><a href="#">Home</a></li>
                     <li><a href="#tools">Tools</a></li>
+                    <li><a href="#offers">Offers</a></li>
                     <li><a href="mailto:tooluxehub@gmail.com">Contact</a></li>
                 </ul>
             </nav>
@@ -143,11 +167,12 @@
                         <div class="search-container">
                             <i class="fas fa-search"></i>
                             <input type="text" id="searchInput" placeholder="Search tools in the selected category...">
-                            <p id="no-results">No tools found matching your search.</p>
+                            <p id="no-results" class="hidden">No tools found matching your search.</p>
                         </div>
                         
                         <div id="image-tools" class="tool-content active"><div class="tool-grid">
-                            <div class="tool-card" data-tool-id="image-converter"><i class="tool-icon fas fa-exchange-alt"></i><h3>Image Converter</h3><p>Convert images to JPG, PNG, WEBP, etc.</p><a href=" Image-Converter.html" class="tool-button">Use Tool</a></div>
+                            <div class="tool-card sponsored" data-tool-id="sponsored-super-editor"><i class="tool-icon fas fa-star"></i><h3>Super Image Editor</h3><p>Get pro features with our featured partner.</p><a href="#tool/sponsored-super-editor" class="tool-button">Try Pro</a></div>
+                            <div class="tool-card" data-tool-id="image-converter"><i class="tool-icon fas fa-exchange-alt"></i><h3>Image Converter</h3><p>Convert images to JPG, PNG, WEBP, etc.</p><a href="#tool/image-converter" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="image-compressor"><i class="tool-icon fas fa-compress-arrows-alt"></i><h3>Image Compressor</h3><p>Reduce file size without losing quality.</p><a href="#tool/image-compressor" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="image-resizer"><i class="tool-icon fas fa-ruler-combined"></i><h3>Image Resizer</h3><p>Change the dimensions of your images.</p><a href="#tool/image-resizer" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="image-cropper"><i class="tool-icon fas fa-crop-alt"></i><h3>Image Cropper</h3><p>Crop images to a specific area.</p><a href="#tool/image-cropper" class="tool-button">Use Tool</a></div>
@@ -225,7 +250,6 @@
                             <div class="tool-card" data-tool-id="bsa-calculator"><i class="tool-icon fas fa-male"></i><h3>Body Surface Area Calculator</h3><p>Calculate a person's body surface area.</p><a href="#tool/bsa-calculator" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="days-until-from-calculator"><i class="tool-icon fas fa-calendar-day"></i><h3>Days Until/From Calculator</h3><p>Count days from or until a date.</p><a href="#tool/days-until-from-calculator" class="tool-button">Use Tool</a></div>
                         </div></div>
-
                         <div id="text-tools" class="tool-content"><div class="tool-grid">
                             <div class="tool-card" data-tool-id="text-case-converter"><i class="tool-icon fas fa-font"></i><h3>Text Case Converter</h3><p>Convert text to various cases.</p><a href="#tool/text-case-converter" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="word-char-counter"><i class="tool-icon fas fa-sort-amount-down"></i><h3>Word & Character Counter</h3><p>Count words and characters in your text.</p><a href="#tool/word-char-counter" class="tool-button">Use Tool</a></div>
@@ -241,7 +265,6 @@
                             <div class="tool-card" data-tool-id="emoji-remover"><i class="tool-icon fas fa-smile"></i><h3>Emoji Remover/Adder</h3><p>Remove or add emojis from your text.</p><a href="#tool/emoji-remover" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="hashtag-generator"><i class="tool-icon fas fa-hashtag"></i><h3>Hashtag Generator</h3><p>Generate hashtags for social media.</p><a href="#tool/hashtag-generator" class="tool-button">Use Tool</a></div>
                         </div></div>
-
                         <div id="dev-tools" class="tool-content"><div class="tool-grid">
                             <div class="tool-card" data-tool-id="code-minifier"><i class="tool-icon fas fa-file-code"></i><h3>HTML/CSS/JS Minifier</h3><p>Minify code to reduce file size.</p><a href="#tool/code-minifier" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="json-formatter"><i class="tool-icon fas fa-sitemap"></i><h3>JSON Formatter & Validator</h3><p>Format and validate JSON data.</p><a href="#tool/json-formatter" class="tool-button">Use Tool</a></div>
@@ -257,7 +280,6 @@
                             <div class="tool-card" data-tool-id="source-code-viewer"><i class="tool-icon fas fa-eye"></i><h3>Website Source Code Viewer</h3><p>View the HTML source code of any URL.</p><a href="#tool/source-code-viewer" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="ip-geolocation"><i class="tool-icon fas fa-map-marker-alt"></i><h3>IP Geolocation Checker</h3><p>Find the location of an IP address.</p><a href="#tool/ip-geolocation" class="tool-button">Use Tool</a></div>
                         </div></div>
-
                         <div id="color-tools" class="tool-content"><div class="tool-grid">
                             <div class="tool-card" data-tool-id="color-picker-from-image"><i class="tool-icon fas fa-eye-dropper"></i><h3>Color Picker from Image</h3><p>Extract colors from an uploaded image.</p><a href="#tool/color-picker-from-image" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="hex-rgb-converter"><i class="tool-icon fas fa-sync"></i><h3>HEX to RGB Converter</h3><p>Convert HEX color codes to RGB.</p><a href="#tool/hex-rgb-converter" class="tool-button">Use Tool</a></div>
@@ -271,7 +293,6 @@
                             <div class="tool-card" data-tool-id="flat-ui-colors"><i class="tool-icon fas fa-th-large"></i><h3>Flat UI Color Palettes</h3><p>Browse beautiful flat UI colors.</p><a href="#tool/flat-ui-colors" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="css-color-generator"><i class="tool-icon fab fa-css3-alt"></i><h3>CSS Color Code Generator</h3><p>Generate various CSS color codes.</p><a href="#tool/css-color-generator" class="tool-button">Use Tool</a></div>
                         </div></div>
-
                         <div id="seo-tools" class="tool-content"><div class="tool-grid">
                             <div class="tool-card" data-tool-id="keyword-density-checker"><i class="tool-icon fas fa-search-dollar"></i><h3>Keyword Density Checker</h3><p>Analyze keyword density of a page.</p><a href="#tool/keyword-density-checker" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="meta-tag-analyzer"><i class="tool-icon fas fa-tags"></i><h3>Meta Tag Analyzer</h3><p>Analyze the meta tags of a URL.</p><a href="#tool/meta-tag-analyzer" class="tool-button">Use Tool</a></div>
@@ -284,7 +305,6 @@
                             <div class="tool-card" data-tool-id="youtube-extractor"><i class="tool-icon fab fa-youtube"></i><h3>YouTube Title & Tag Extractor</h3><p>Extract titles and tags from YT videos.</p><a href="#tool/youtube-extractor" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="instagram-caption-analyzer"><i class="tool-icon fab fa-instagram"></i><h3>Instagram Caption Analyzer</h3><p>Analyze the effectiveness of IG captions.</p><a href="#tool/instagram-caption-analyzer" class="tool-button">Use Tool</a></div>
                         </div></div>
-
                         <div id="utility-tools" class="tool-content"><div class="tool-grid">
                             <div class="tool-card" data-tool-id="qr-code-generator"><i class="tool-icon fas fa-qrcode"></i><h3>QR Code Generator & Scanner</h3><p>Create or scan QR codes instantly.</p><a href="#tool/qr-code-generator" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="barcode-generator"><i class="tool-icon fas fa-barcode"></i><h3>Barcode Generator</h3><p>Create various types of barcodes.</p><a href="#tool/barcode-generator" class="tool-button">Use Tool</a></div>
@@ -301,7 +321,6 @@
                             <div class="tool-card" data-tool-id="file-size-calculator"><i class="tool-icon fas fa-file-invoice"></i><h3>File Size Calculator</h3><p>Calculate file sizes in various units.</p><a href="#tool/file-size-calculator" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="timestamp-converter"><i class="tool-icon fas fa-history"></i><h3>Epoch/Unix Timestamp Converter</h3><p>Convert between human-readable dates.</p><a href="#tool/timestamp-converter" class="tool-button">Use Tool</a></div>
                         </div></div>
-
                         <div id="media-tools" class="tool-content"><div class="tool-grid">
                             <div class="tool-card" data-tool-id="audio-converter"><i class="tool-icon fas fa-file-audio"></i><h3>Audio Converter</h3><p>Convert between audio formats (MP3, WAV).</p><a href="#tool/audio-converter" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="video-converter"><i class="tool-icon fas fa-file-video"></i><h3>Video Converter</h3><p>Convert between video formats (MP4, AVI).</p><a href="#tool/video-converter" class="tool-button">Use Tool</a></div>
@@ -324,7 +343,47 @@
                             <div class="tool-card" data-tool-id="video-frame-extractor"><i class="tool-icon fas fa-file-image"></i><h3>Video Frame Extractor</h3><p>Extract still image frames from a video.</p><a href="#tool/video-frame-extractor" class="tool-button">Use Tool</a></div>
                             <div class="tool-card" data-tool-id="youtube-thumbnail-downloader"><i class="tool-icon fab fa-youtube-square"></i><h3>YouTube Thumbnail Downloader</h3><p>Download thumbnails from YouTube videos.</p><a href="#tool/youtube-thumbnail-downloader" class="tool-button">Use Tool</a></div>
                         </div></div>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="adsense-placeholder homepage-ad-banner">
+                <span>Homepage AdSense Banner (e.g., 728x90)</span>
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_AD_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            </div>
+            
+            <section class="content-section">
+                <div class="container">
+                    <div class="section-header"><h2>📰 From Our Blog</h2><p>Tips, tricks, and guides to boost your productivity.</p></div>
+                    <div class="blog-grid">
+                        <div class="blog-card"><img src="https://placehold.co/600x400/007BFF/white?text=AI+Tools" alt="AI Tools"><div class="blog-content"><h3>Top 10 AI Tools for Students</h3><p>Discover AI-powered tools that can help you ace your studies, from writing essays to solving complex problems.</p><a href="#" class="read-more-btn">Read More →</a></div></div>
+                        <div class="blog-card"><img src="https://placehold.co/600x400/28a745/white?text=Design" alt="Design"><div class="blog-content"><h3>Best Color Palette Generators for 2024</h3><p>Struggling with colors? Check out our review of the best tools to create stunning color schemes for your projects.</p><a href="#" class="read-more-btn">Read More →</a></div></div>
+                        <div class="blog-card"><img src="https://placehold.co/600x400/ffc107/black?text=Productivity" alt="Productivity"><div class="blog-content"><h3>How to Compress PDFs Without Losing Quality</h3><p>A step-by-step guide on reducing PDF file sizes for easy sharing, using our free online tool.</p><a href="#" class="read-more-btn">Read More →</a></div></div>
+                    </div>
+                </div>
+            </section>
 
+            <div class="adsense-placeholder homepage-ad-banner">
+                <span>Homepage AdSense Banner (e.g., 728x90)</span>
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_AD_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            </div>
+
+            <section class="content-section" id="offers-preview">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>🎁 Hot Offers & Rewards</h2>
+                        <p>Check out these popular offers and rewards from our partners.</p>
+                        <a href="#offers" class="view-all-btn">View All Offers →</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <div class="container">
+                    <div class="subscribe-box">
+                        <h2>Don't Miss Out!</h2>
+                        <p>Subscribe to our newsletter to get exclusive access to new tools, free guides, and special offers.</p>
+                        <form class="subscribe-form" onsubmit="return false;"><input type="email" placeholder="Enter your email address" required><button type="submit">Subscribe</button></form>
                     </div>
                 </div>
             </section>
@@ -333,18 +392,43 @@
         <div id="individual-tool-view" class="hidden">
             <div class="container">
                 <div class="individual-tool-view">
-                    <a href="#tools" class="back-to-tools-btn">
-                        <i class="fas fa-arrow-left"></i>
-                        Back to All Tools
-                    </a>
-                    <div class="tool-page-header">
-                        <h2 id="tool-page-title"></h2>
-                        <p id="tool-page-description"></p>
+                    <a href="#tools" class="back-to-home-btn"><i class="fas fa-arrow-left"></i> Back to All Tools</a>
+                    <div class="page-header"><h2 id="tool-page-title"></h2><p id="tool-page-description"></p></div>
+                    <div class="tool-and-ad-grid">
+                        <div id="tool-page-content" class="tool-page-main"></div>
+                        <div class="sidebar-ad-container">
+                            <div class="adsense-placeholder" style="width: 300px; height: 600px;">
+                                <span>Sidebar Ad<br>300x600</span>
+                                <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_AD_SLOT_ID"></ins>
+                            </div>
+                        </div>
                     </div>
-                    <div id="tool-page-content">
-                        <h3>Tool Interface Placeholder</h3>
-                        <p>Your specific tool's HTML and functionality will be built here.</p>
-                        <p>Just find this section in the code and replace this placeholder with your actual tool's interface.</p>
+                    <div class="adsense-placeholder below-tool-ad">
+                        <span>Below Tool Ad<br>728x90</span>
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_AD_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="cpa-offers-view" class="hidden">
+            <div class="container">
+                <div class="cpa-offers-view">
+                    <a href="#" class="back-to-home-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+                    <div class="page-header"><h2>🎁 Hot Offers & Rewards</h2><p>Check out these popular offers and rewards from our partners.</p></div>
+                    <div class="offer-grid">
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/965821/white?text=Viking+Game" alt="Viking Game Offer"><div class="offer-content"><span class="offer-tag">Gaming</span><h3>Play Vikings: War of Clans Free</h3><p>Lead your army to victory, build a powerful clan, and become a legend. Free to play on PC & Mobile.</p><a href="#" class="offer-button">Play For Free →</a></div></div>
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/c2185b/white?text=Win+Gift+Card" alt="Gift Card Offer"><div class="offer-content"><span class="offer-tag">Rewards</span><h3>Enter to Win a $100 Amazon Card</h3><p>Your opinion is valuable! Complete a short survey for a chance to win a $100 gift card. Takes only 2 minutes.</p><a href="#" class="offer-button">Enter Now →</a></div></div>
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/0277bd/white?text=NordVPN" alt="VPN Offer"><div class="offer-content"><span class="offer-tag">Security</span><h3>Get 75% OFF NordVPN Today</h3><p>Protect your online privacy and secure your internet connection with the world's leading VPN service.</p><a href="#" class="offer-button">Claim Discount →</a></div></div>
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/d81b60/white?text=Temu" alt="Shopping Offer"><div class="offer-content"><span class="offer-tag">Shopping</span><h3>Get $100 Coupon Bundle on Temu</h3><p>Shop for less with a massive coupon bundle for new users on Temu. Electronics, clothing, and more.</p><a href="#" class="offer-button">Unlock Coupons →</a></div></div>
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/388e3c/white?text=Keto+Diet" alt="Diet Plan Offer"><div class="offer-content"><span class="offer-tag">Health</span><h3>Your Custom Keto Diet Plan</h3><p>Get a personalized 8-week keto meal plan based on your food preferences and weight loss goals.</p><a href="#" class="offer-button">Get My Plan →</a></div></div>
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/f57c00/white?text=SurveyJunkie" alt="Survey Offer"><div class="offer-content"><span class="offer-tag">Finance</span><h3>Earn Cash with SurveyJunkie</h3><p>Share your opinion to help brands improve their products and get paid for it. Simple and rewarding.</p><a href="#" class="offer-button">Start Earning →</a></div></div>
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/5e35b1/white?text=Audiobooks" alt="Audiobook Offer"><div class="offer-content"><span class="offer-tag">Books</span><h3>2 Free Audiobooks from Audible</h3><p>Listen to your favorite books on the go. Get a 30-day free trial and two free audiobooks to keep.</p><a href="#" class="offer-button">Claim Free Books →</a></div></div>
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/00838f/white?text=Raid+SL" alt="Raid Shadow Legends Offer"><div class="offer-content"><span class="offer-tag">Gaming</span><h3>Raid: Shadow Legends + Free Pack</h3><p>Battle your way through a visually-stunning mythical RPG world. New players get a free starter pack!</p><a href="#" class="offer-button">Play and Claim →</a></div></div>
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/c62828/white?text=Paramount" alt="Paramount Offer"><div class="offer-content"><span class="offer-tag">Streaming</span><h3>Paramount+ 1-Week Free Trial</h3><p>Live sports, breaking news, and a mountain of entertainment. Try it free for a full week.</p><a href="#" class="offer-button">Try For Free →</a></div></div>
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/ad1457/white?text=Solitaire" alt="Solitaire Game Offer"><div class="offer-content"><span class="offer-tag">Gaming</span><h3>Play Solitaire & Win Real Cash</h3><p>Compete against others in this modern version of the classic card game for real cash prizes.</p><a href="#" class="offer-button">Play to Win →</a></div></div>
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/1565c0/white?text=CashApp" alt="Cash App Offer"><div class="offer-content"><span class="offer-tag">Finance</span><h3>Get $5 Free from Cash App</h3><p>The easy way to send, spend, save, and invest money. Sign up and get a free $5 bonus after your first payment.</p><a href="#" class="offer-button">Get $5 Bonus →</a></div></div>
+                        <div class="offer-card"><img class="offer-thumbnail" src="https://placehold.co/600x360/20c997/white?text=Fitness+App" alt="Fitness App Offer"><div class="offer-content"><span class="offer-tag">Fitness</span><h3>Join the 28-Day Fitness Challenge</h3><p>Get a personalized workout and meal plan to transform your body. Sign up and start your journey today!</p><a href="#" class="offer-button">Join The Challenge →</a></div></div>
                     </div>
                 </div>
             </div>
@@ -353,76 +437,86 @@
     
     <footer class="footer">
         <div class="container">
+            <div class="adsense-placeholder footer-ad">
+                <span>Footer Ad<br>728x90</span>
+                 <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_AD_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            </div>
             <a href="#" class="logo">Tooluxe Hub</a>
             <p class="tagline">Simplifying your digital life.</p>
             <p class="contact-info">Contact: <a href="mailto:tooluxehub@gmail.com">tooluxehub@gmail.com</a></p>
             <ul class="footer-links">
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms of Use</a></li>
+                <li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="#">Advertise With Us</a></li>
             </ul>
         </div>
     </footer>
+
+    <div id="sticky-ad-banner" class="sticky-footer-ad">
+        <div class="adsense-placeholder" style="margin: 0; min-height: 50px; width: 728px;">
+            <span>Sticky Footer Ad</span>
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_AD_SLOT_ID" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        </div>
+        <button id="close-sticky-ad" class="close-ad-btn" title="Close Ad">×</button>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const mainView = document.getElementById('main-homepage-view');
             const toolView = document.getElementById('individual-tool-view');
+            const cpaView = document.getElementById('cpa-offers-view');
             const toolPageTitle = document.getElementById('tool-page-title');
             const toolPageDescription = document.getElementById('tool-page-description');
             const toolPageContent = document.getElementById('tool-page-content');
-            
             const tabLinks = document.querySelectorAll('.tab-link');
             const tabContents = document.querySelectorAll('.tool-content');
             const searchInput = document.getElementById('searchInput');
             const noResultsMessage = document.getElementById('no-results');
+            const stickyAdBanner = document.getElementById('sticky-ad-banner');
+            const closeStickyAdBtn = document.getElementById('close-sticky-ad');
 
-            // --- SPA Router Logic ---
             const handleRouteChange = () => {
                 const hash = window.location.hash;
 
+                // Hide all views first
+                mainView.classList.add('hidden');
+                toolView.classList.add('hidden');
+                cpaView.classList.add('hidden');
+
                 if (hash.startsWith('#tool/')) {
-                    // Show individual tool page
                     const toolId = hash.substring(6);
                     const toolCard = document.querySelector(`.tool-card[data-tool-id='${toolId}']`);
-
                     if (toolCard) {
-                        const title = toolCard.querySelector('h3').textContent;
-                        const description = toolCard.querySelector('p').textContent;
-
-                        toolPageTitle.textContent = title;
-                        toolPageDescription.textContent = description;
-                        
-                        // IMPORTANT: This is where you will build the interface for each tool.
-                        // You can use a big switch statement or if/else chain based on `toolId`
-                        // to inject the correct tool's HTML into `toolPageContent`.
-                        toolPageContent.innerHTML = `
-                            <h3>${title} Interface</h3>
-                            <p>Your tool functionality for <strong>${title}</strong> will be built here.</p>
-                            <p>To do this, edit the JavaScript 'handleRouteChange' function.</p>
-                        `;
-
-                        mainView.classList.add('hidden');
+                        toolPageTitle.textContent = toolCard.querySelector('h3').textContent;
+                        toolPageDescription.textContent = toolCard.querySelector('p').textContent;
+                        toolPageContent.innerHTML = `<h3>${toolCard.querySelector('h3').textContent} Interface</h3><p>Your tool functionality for <strong>${toolPageTitle.textContent}</strong> will be built here.</p>`;
                         toolView.classList.remove('hidden');
+                        try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
                         window.scrollTo(0, 0);
                     } else {
-                        // Tool not found, go back to homepage
-                        window.location.hash = '#tools';
+                        window.location.hash = ''; // Go home if tool not found
                     }
+                } else if (hash === '#offers') {
+                    cpaView.classList.remove('hidden');
+                    window.scrollTo(0, 0);
                 } else {
-                    // Show main homepage
                     mainView.classList.remove('hidden');
-                    toolView.classList.add('hidden');
                 }
             };
-
-            // --- Event Listeners ---
             window.addEventListener('hashchange', handleRouteChange);
-            handleRouteChange(); // Handle initial page load
+            handleRouteChange(); 
 
-            // Tab Switching Logic
+            let bannerShown = false;
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 800 && !bannerShown) {
+                    stickyAdBanner.classList.add('visible');
+                    bannerShown = true;
+                }
+            });
+            closeStickyAdBtn.addEventListener('click', () => { stickyAdBanner.style.display = 'none'; });
+
             tabLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
+                    window.location.hash = '#tools';
                     const tabId = link.dataset.tab;
                     tabLinks.forEach(l => l.classList.remove('active'));
                     tabContents.forEach(c => c.classList.remove('active'));
@@ -433,7 +527,6 @@
                 });
             });
 
-            // Search Filter Logic
             const filterTools = () => {
                 const searchTerm = searchInput.value.toLowerCase().trim();
                 const activeTabContent = document.querySelector('.tool-content.active');
@@ -450,7 +543,6 @@
             };
             searchInput.addEventListener('keyup', filterTools);
 
-            // Hamburger menu logic
             const hamburger = document.getElementById('hamburger');
             const navLinks = document.getElementById('navLinks');
             hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
